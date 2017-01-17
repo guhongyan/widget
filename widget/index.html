@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>工程地质条件适宜度与动态调控法</title>
+
+    <style>
+        body{
+            background-color: #4BCEFC;
+        }
+        #con{
+            margin: 10px;
+            font-size: 24px;
+            color: #fff;
+        }
+        .shengcheng{
+            display: block;
+            float: left;
+            width: 60px;
+            line-height: 29px;
+            font-size: 24px;
+            color: #fff;
+        }
+        ul{
+            margin-bottom: 10px;
+        }
+        ul li{ 
+            margin: 5px 10px;
+            padding: 5px;
+            color: #000;
+            word-wrap: break-word;
+        }
+        input{
+            border: 1px solid red;
+            width: 45px;
+        }
+        .aaa{
+
+            overflow: auto;
+        }
+        .jieguo{
+
+
+            overflow: auto;
+        }
+        .bbb{
+;
+            overflow: auto;
+        }
+        .sys-info{
+            width: 100%;
+            line-height: 40px;
+            overflow: auto
+        }
+        .fnsd{
+            line-height: 27px;
+            width: 60px;
+            float: left;
+        }
+        .shengcheng{
+
+        }
+    </style>
+</head>
+<body>
+
+
+    <label><input type="text" name="" placeholder="请输入因素个数" class="fnsd">
+        <span class="shengcheng">生成矩阵</span>
+    </label>
+    <label id="con">计算</label>
+    <div class='sys-info'>
+    </div>
+
+    <div class="nidongde "></div>
+</body>
+<script type="text/javascript" src="script/jquery.min.js"></script>
+<script type="text/javascript" src="script/api.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        $api.fixStatusBar( $api.dom('header') );
+    }  
+    $('.shengcheng').on('click',function(){
+        $('.sys-info').html('')
+        var number =Number($('.fnsd').val());
+        var aaa = '<div class="aaa"></div>';
+        var jieguofu = '<div class="jieguo"></div>';
+        var input = '<input type="number" name="" value="">';
+        var jieguo = '<input type="text" name="" value="结果">';
+        var inshu = '<input type="text" name="" value="因素">';
+        var bbb = '<div class="bbb"></div>' 
+        $('.sys-info').prepend(jieguofu);
+        $('.sys-info').prepend(jieguofu);
+        $('.sys-info').prepend(jieguofu);
+        $('.sys-info').prepend(aaa);
+       
+    // 循环形成头部栏目
+    for (var i = 0; i <number+2; i++) {
+        if (i==0) {
+            $('.aaa').append(input);
+            $('.jieguo').append(jieguo);
+        }else if(i == number+1) {
+            $('.aaa').append(jieguo)
+            $('.jieguo').append(input)
+        } else{
+            $('.aaa').append(inshu)
+            $('.jieguo').append(input)
+            // 添加bb  div
+            $('.aaa').after(bbb);
+        }
+    }
+    // 循环管生成下边3个
+    for (var j = 0; j <number+2; j++) {
+        if (j==0) {
+            $('.bbb').append(inshu)
+        }else{
+            $('.bbb').append(input)
+
+        }
+    }
+
+         $('.jieguo').width((number+2)*50)
+      $('.aaa').width((number+2)*50)
+      $('.bbb').width((number+2)*50)
+})
+
+
+
+    $('#con').on('click',function(){ 
+      var number =Number($('.fnsd').val()); 
+      var a = Array();
+      var lie = Array();
+      var hang = Array(); 
+      var hangush = Array(); 
+      for (var i = 0; i <number; i++) {   
+        a[i] =  Array();
+        for (var j = 0; j <number; j++) {
+            a[i][j] =   $('.bbb').eq(i).children('input').eq(j+1).val();
+        }
+    }
+    console.log(a)
+    for (var i = 0; i <number; i++) {
+        var _hang=0;
+        var _lie =0 ;
+
+        for (var j = 0; j <number; j++) {
+
+            _lie += Number(a[j][i]);
+                // console.log(_lie)
+                _hang += Number(a[i][j]);
+
+            }
+            // hang[i]  = _hang;
+            // lie[i] = _lie;
+            hang.push(_hang);
+            lie.push(_lie);
+
+        }
+        var _henghe=0;
+        for(var i = 0; i <number; i++){
+            $('.bbb').eq(i).children('input').eq(number+1).val(hang[i]);
+            $('.jieguo').eq(0).children('input').eq(i+1).val(lie[i]);
+            _henghe += Number(hang[i]);
+            $('.jieguo').eq(1).children('input').eq(i+1).val(lie[i]+hang[i]);
+
+        }
+        console.log(_henghe)
+        $('.jieguo').eq(0).children('input').eq(number+1).val(_henghe);
+        $('.jieguo').eq(1).children('input').eq(number+1).val(_henghe*2);
+        
+
+    });
+</script>
+</html>
